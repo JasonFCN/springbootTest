@@ -1,0 +1,32 @@
+<!-- <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>首页</title>
+</head>
+<body>
+<h1>Index</h1>
+Hello <span th:text="${message}"></span>
+
+<form th:action="@{/sendEmail}" method="post" enctype="multipart/form-data">
+	添加附件<input type="file" name="files">
+			<input type="submit" value="发送">
+</form>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+</head>
+<body>
+<header>
+Hello <span th:text="${message}"></span>
+sessionID: <span th:text="${sessionID}"></span>
+csrftoken: <span th:text="${csrftoken}"></span>
+<div><span>登录</span>/<span>注册</span></div>
+<div><a href="logout">退出</a></div>
+</header>
+</body>
+</html>
