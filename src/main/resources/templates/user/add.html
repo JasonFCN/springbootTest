@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>人员信息编辑</title>
+<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+	<form class="form-horizontal" action="#" th:action="@{/user/saveUser}" th:object="${user}" method="post" id="form1" >
+		<input type="hidden" name="pageName" value="add">
+		<div class="form-group">
+			<label for="userName" class="col-sm-2 control-label">账号</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control" id="userName" placeholder="账号" th:field="*{userName}">
+			</div>
+			<span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" ></span><span id="userNameMessage"></span>
+		</div>
+		<div class="form-group">
+			<label for="password1" class="col-sm-2 control-label">密码</label>
+			<div class="col-sm-10">
+				<input type="password" class="form-control" id="password1" placeholder="密码" th:field="*{passWord}">
+			</div>
+			<span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></span>
+		</div>
+		<div class="form-group">
+			<label for="password2" class="col-sm-2 control-label">重复密码</label>
+			<div class="col-sm-10">
+				<input type="password" class="form-control" id="password2" placeholder="重复密码" >
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="nickName" class="col-sm-2 control-label">昵称</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control" id="nickName" placeholder="昵称" th:field="*{nickName}">
+			</div>
+			<span th:if="${#fields.hasErrors('nickName')}" th:errors="*{nickName}"></span>
+		</div>
+		<div class="form-group">
+			<label for="email" class="col-sm-2 control-label">邮箱</label>
+			<div class="col-sm-10">
+				<input type="email" class="form-control" id="email" placeholder="邮箱" th:field="*{email}">
+			</div>
+		</div>
+		
+		<input type="submit" />
+	</form>
+</body>
+<script type="text/javascript" th:src="@{/webjars/jquery/3.4.0/jquery.js}"></script>
+<script type="text/javascript">
+	$("#form1").on("submit",function(event){
+		var m = $("#userNameMessage").text();
+		if(m!=null&&m!=""){
+			typewriter("userNameMessage");
+			event.preventDefault();
+			return false;
+		}
+		var p1 = $("#password1").val();
+		var p2 = $("#password2").val();
+		if(p1==null||p1==""){
+			alert("请输入密码");
+			event.preventDefault();
+			return false;
+		}
+		if(p2==null||p2==""){
+			alert("请再次输入密码");
+			event.preventDefault();
+			return false;
+		}
+		if(p1!=p2){
+			alert("密码不一致");
+			event.preventDefault();
+			return false;
+		}  
+		
+	});
+	$(function(){
+		$("#userName").on("blur",function(){
+			var userName = $("#userName").val();
+			$.get("/user/hasUserName",{userName:userName},function(data){
+				if(data==1){
+					$("#userNameMessage").text("该账户已存在！");
+				}else{
+					$("#userNameMessage").text("");
+				}
+			});
+		});
+	});
+	
+	function typewriter(id) {
+		var $ele = document.getElementById(id);
+		var str = $ele.innerHTML, progress = 0;
+		$ele.innerHTML = '';
+		var timer = setInterval(function() {
+			var current = str.substr(progress, 1);
+			if (current == '<') {
+				progress = str.indexOf('>', progress) + 1;
+			} else {
+				progress++;
+			}
+			$ele.innerHTML = str.substring(0, progress)
+					+ (progress & 1 ? '_' : '');
+			if (progress >= str.length) {
+				clearInterval(timer);
+			}
+		}, 75);
+	}
+</script>
+</html>

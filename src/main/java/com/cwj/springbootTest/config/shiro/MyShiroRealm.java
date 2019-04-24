@@ -15,47 +15,45 @@ import org.springframework.context.annotation.Lazy;
 
 import com.cwj.springbootTest.domain.entity.SysPermission;
 import com.cwj.springbootTest.domain.entity.SysRole;
+import com.cwj.springbootTest.domain.entity.User;
 import com.cwj.springbootTest.domain.entity.UserInfo;
 import com.cwj.springbootTest.service.UserInfoService;
+import com.cwj.springbootTest.service.UserService;
 public class MyShiroRealm extends AuthorizingRealm{
 	
 	//@Resource(name="userInfoService")
 	@Autowired
 	@Lazy
-	UserInfoService userInfoService;
+	UserService userService;
 	
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 	    System.out.println("权限配置-->MyShiroRealm.doGetAuthorizationInfo()");
 	    SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-	    UserInfo userInfo  = (UserInfo)principals.getPrimaryPrincipal();
-	    for(SysRole role:userInfo.getRoleList()){
-	        authorizationInfo.addRole(role.getRole());
-	        for(SysPermission p:role.getPermissions()){
-	            authorizationInfo.addStringPermission(p.getPermission());
-	        }
-	    }
+	    User user  = (User)principals.getPrimaryPrincipal();
+	    authorizationInfo.addRole("");
+	    authorizationInfo.addStringPermission("");
 	    return authorizationInfo;
 	}
 
 	@Override
-	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
-			throws AuthenticationException {
+	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 	    UsernamePasswordToken upToken = (UsernamePasswordToken)token;
 	    //获取用户的输入的账号.
 	    String username = (String)upToken.getPrincipal();
-	    System.out.println(upToken.getCredentials());
+	    if(username==null){
+	    	return null;
+	    }
 	    //通过username从数据库中查找 User对象，如果找到，没找到.
 	    //实际项目中，这里可以根据实际情况做缓存，如果不做，Shiro自己也是有时间间隔机制，2分钟内不会重复执行该方法
-	    UserInfo userInfo = userInfoService.findByUsername(username);
-	    if(userInfo == null){
+	    User user = userService.findByUserName(username);
+	    if(user == null){
 	        return null;
 	    }
-	    System.out.println("----->>userInfo:"+userInfo.getRoleList().get(0).getPermissions().get(0).getName());
 	    SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-	            userInfo, //用户
-	            userInfo.getPassword(), //密码
-	            ByteSource.Util.bytes(userInfo.getCredentialsSalt()),//salt=username+salt
+	    		user, //用户
+	    		user.getPassWord(), //密码
+	            ByteSource.Util.bytes(user.getCredentialsSalt()),//salt=username+salt
 	            getName()  //realm name
 	    );
 	    return authenticationInfo;

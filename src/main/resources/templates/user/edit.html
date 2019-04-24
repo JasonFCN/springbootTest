@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>人员信息编辑</title>
+<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+	<form class="form-horizontal" action="#" th:action="@{/user/saveUser}" method="post" th:object="${user}">
+ 		<input type="hidden" name="pageName" th:value="edit">
+		<input type="hidden" name="id" th:value="*{id}" >
+		<input type="hidden" name="passWord" th:value="*{passWord}" >
+		<input type="hidden" name="salt" th:value="*{salt}" >
+		<input type="hidden" name="regTime" th:value="*{regTime}" >
+		<input type="hidden" name="userType" th:value="*{userType}" >
+		<div class="form-group">
+			<label for="userName" class="col-sm-2 control-label">账号</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control" id="userName" placeholder="账号" th:value="*{userName}" readonly name="userName">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="nickName" class="col-sm-2 control-label">昵称</label>
+			<div class="col-sm-10">
+				<input type="text" class="form-control" id="nickName" placeholder="昵称" th:value="*{nickName}" name="nickName">
+			</div>
+			<span th:text="${message !=null and message.hasFieldErrors('nickName')?message.getFieldError('nickName').getDefaultMessage():''}"></span>
+		</div>
+		<div class="form-group">
+			<label for="email" class="col-sm-2 control-label">邮箱</label>
+			<div class="col-sm-10">
+				<input type="email" class="form-control" id="email" placeholder="邮箱" th:value="*{email}" name="email">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="email" class="col-sm-2 control-label">是否可用</label>
+			<div class="col-sm-10">
+				<input type="radio" value="true" name="isUsable" th:checked="*{isUsable?true:false}"><span>可用</span>
+				<input type="radio" value="false" name="isUsable" th:checked="*{isUsable?false:true}"><span>不可用</span>
+			</div>
+		</div>
+		<input type="submit" value="提交" />
+	</form>
+</body>
+</html>

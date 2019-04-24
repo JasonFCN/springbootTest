@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>登录</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/css/login-signin.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <form class="form-signin" action="login" method="post" th:object="${failuser}">
+        <h2 class="form-signin-heading">请登录</h2>
+        <label for="inputEmail" class="sr-only">账号</label>
+        <input type="text" id="inputEmail" name="userName" class="form-control" placeholder="账号" required autofocus th:value="*{userName}">
+        <label for="inputPassword" class="sr-only">密码</label>
+        <input type="password" id="inputPassword" name="passWord" class="form-control" placeholder="密码" required th:value="*{passWord}">
+        <div class="checkbox">
+          <span th:text="${message}" style="color: red"></span>
+          <label>
+            <input type="checkbox" value="remember-me"> 记住我
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+      </form>
+    </div>
+  </body>
+</html>
+

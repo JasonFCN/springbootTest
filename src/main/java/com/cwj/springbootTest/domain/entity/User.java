@@ -2,12 +2,12 @@ package com.cwj.springbootTest.domain.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 
 import com.cwj.springbootTest.enums.UserType;
 
@@ -15,36 +15,27 @@ import com.cwj.springbootTest.enums.UserType;
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 2L;
+	
+	public interface AddFormUser{}
 	@Id
 	@GeneratedValue
 	private Long id;
-	@Column(nullable = false, unique = true)
+	
+	@NotBlank(message="用户名不能为空",groups={AddFormUser.class})
 	private String userName;
-	@Column(nullable = false)
+	
+	@NotBlank(message="密码不能为空",groups={AddFormUser.class})
 	private String passWord;
-	@Column(nullable = false, unique = true)
+	
+	private String salt;//加密密码的盐
 	private String email;
-	@Column(nullable = true, unique = true)
+	@NotBlank(message="昵称不能为空",groups={AddFormUser.class})
 	private String nickName;
-	@Column(nullable = false)
 	private String regTime;
 	@Enumerated(EnumType.STRING) 
-	@Column(nullable = true)
 	private UserType userType;
+	private Boolean isUsable;
 	
-	
-	public User() {
-		super();
-	}
-	public User(String userName, String passWord, String email, String nickName, String regTime) {
-		super();
-		this.userName = userName;
-		this.passWord = passWord;
-		this.email = email;
-		this.nickName = nickName;
-		this.regTime = regTime;
-		this.userType = UserType.STUDENT;
-	}
 	public Long getId() {
 		return id;
 	}
@@ -86,5 +77,22 @@ public class User implements Serializable {
 	}
 	public void setUserType(UserType userType) {
 		this.userType = userType;
+	}
+	public String getSalt() {
+		return salt;
+	}
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
+	
+	public Boolean getIsUsable() {
+		return isUsable;
+	}
+	public void setIsUsable(Boolean isUsable) {
+		this.isUsable = isUsable;
+	}
+	public String getCredentialsSalt() {
+		// TODO Auto-generated method stub
+		return userName+salt;
 	}
 }
